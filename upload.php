@@ -1,7 +1,12 @@
 <?php
-// Проверка пароля
-if ($_POST['password'] !== 'irinadimaruslandanyastusovet2025') {
-    die('Неверный пароль');
+require_once 'password_utils.php';
+
+header('Content-Type: application/json');
+
+// Проверяем пароль
+$inputPassword = $_POST['password'] ?? '';
+if (!verifyPassword($inputPassword)) {
+    die(json_encode(['status' => 'error', 'message' => 'Неверный пароль']));
 }
 
 // Папка для загрузки изображений
@@ -44,6 +49,8 @@ foreach ($_FILES['images']['tmp_name'] as $key => $tmpName) {
     }
 }
 
-header('Content-Type: application/json');
+// Обновляем файл last_change.txt
+file_put_contents('last_change.txt', time());
+
 echo json_encode($response);
 ?>

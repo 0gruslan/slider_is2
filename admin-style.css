@@ -77,3 +77,18 @@ body {
     height: 25px;
     cursor: pointer;
 }
+
+.update-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    display: none;
+}
+
+.update-indicator.show {
+    display: block;
+}

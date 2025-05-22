@@ -1,13 +1,29 @@
+// Глобальная переменная для хранения пароля
+let adminPassword = '';
+
 // Проверка пароля
 function checkPassword() {
     const password = document.getElementById('password').value;
-    if (password === "irinadimaruslandanyastusovet2025") {
-        document.querySelector('.login-container').style.display = 'none';
-        document.querySelector('.admin-panel').style.display = 'block';
-        loadCurrentImages();
-    } else {
-        alert('Неверный пароль');
-    }
+
+    fetch('check_password.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `password=${encodeURIComponent(password)}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            adminPassword = password; // Сохраняем пароль
+            document.querySelector('.login-container').style.display = 'none';
+            document.querySelector('.admin-panel').style.display = 'block';
+            loadCurrentImages();
+        } else {
+            alert('Неверный пароль');
+        }
+    })
+    .catch(error => console.error('Ошибка:', error));
 }
 
 // Загрузка текущих изображений
@@ -34,7 +50,7 @@ function loadCurrentImages() {
 function deleteImage(imageName) {
     if (confirm('Вы уверены, что хотите удалить это изображение?')) {
         const formData = new FormData();
-        formData.append('password', 'irinadimaruslandanyastusovet2025');
+        formData.append('password', adminPassword);
         formData.append('imageName', imageName);
 
         fetch('delete.php', {
@@ -47,7 +63,7 @@ function deleteImage(imageName) {
                 alert('Изображение удалено');
                 loadCurrentImages();
             } else {
-                alert('Ошибка при удалении изображения: ' + data.message);
+                alert('Ошибка: ' + data.message);
             }
         })
         .catch(error => console.error('Ошибка:', error));
@@ -63,7 +79,7 @@ function uploadImages() {
     }
 
     const formData = new FormData();
-    formData.append('password', 'irinadimaruslandanyastusovet2025');
+    formData.append('password', adminPassword);
 
     for (let i = 0; i < files.length; i++) {
         formData.append('images[]', files[i]);

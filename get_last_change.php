@@ -1,29 +1,28 @@
 <?php
-header('Content-Type: application/json');
+header('Content-Type: text/plain');
 header('Cache-Control: no-cache, no-store, must-revalidate');
 header('Pragma: no-cache');
 header('Expires: 0');
 
+// Получаем время последнего изменения в папке images
 $imagesDir = 'images/';
-$images = array();
+$lastChange = 0;
 
 if (file_exists($imagesDir) && is_dir($imagesDir)) {
     $files = scandir($imagesDir);
-    $allowedExtensions = array('jpg', 'jpeg', 'png', 'gif');
-
     foreach ($files as $file) {
         if ($file !== '.' && $file !== '..') {
             $filePath = $imagesDir . $file;
             if (is_file($filePath)) {
-                $extension = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
-                if (in_array($extension, $allowedExtensions)) {
-                    $images[] = $file;
+                $fileTime = filemtime($filePath);
+                if ($fileTime > $lastChange) {
+                    $lastChange = $fileTime;
                 }
             }
         }
     }
 }
 
-sort($images);
-echo json_encode($images);
+// Возвращаем время в миллисекундах (как в JavaScript)
+echo $lastChange * 1000;
 ?>
