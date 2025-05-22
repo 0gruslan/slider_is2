@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="admin-style.css">
+</head>
+<body>
+    <div class="login-container">
+        <h1>Вход в админ-панель</h1>
+        <input type="password" id="password" placeholder="Введите пароль">
+        <button onclick="checkPassword()">Войти</button>
+    </div>
+    <div class="admin-panel" style="display: none;">
+        <h1>Управление слайдером</h1>
+        <div class="upload-container">
+            <h2>Загрузить новые изображения</h2>
+            <input type="file" id="imageUpload" accept="image/*" multiple>
+            <button onclick="uploadImages()">Загрузить</button>
+        </div>
+        <div class="images-container">
+            <h2>Текущие изображения</h2>
+            <div id="currentImages"></div>
+        </div>
+    </div>
+    <script src="admin-script.js"></script>
+</body>
+</html>
